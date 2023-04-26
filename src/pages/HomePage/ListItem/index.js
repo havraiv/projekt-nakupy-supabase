@@ -1,4 +1,5 @@
 import './style.css';
+import { getShoppingItemById, updateShoppingItem } from '../../../functions/db';
 
 export const ListItem = (props) => {
   const { id, done, product, amount, unit } = props;
@@ -19,7 +20,11 @@ export const ListItem = (props) => {
   `;
 
   const handleTick = () => {
-    // zde je potřeba zařídit změnu stavu položky
+    updateShoppingItem(id, !done).then(() => {
+      getShoppingItemById(id).then((response) => {
+        element.replaceWith(ListItem(response.data));
+      });
+    });
   };
 
   element.querySelector('.btn-tick').addEventListener('click', handleTick);
